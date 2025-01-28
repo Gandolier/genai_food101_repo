@@ -50,7 +50,7 @@ optimizer_args:
         weight_decay: 0.0
     sheduler:
         T_max: 100
-        eta_min: 0.000001
+        eta_min: 0.00001
 
 
 fid_args:

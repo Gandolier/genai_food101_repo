@@ -1,5 +1,6 @@
 output/
 trash/
+wandb/
 test_*/
 test*.txt
 *.pth
