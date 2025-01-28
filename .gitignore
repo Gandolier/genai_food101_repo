@@ -1,4 +1,5 @@
 output/
+trash/
 test_*/
 test*.txt
 *.pth
