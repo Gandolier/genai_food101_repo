@@ -148,3 +148,6 @@ cache
 **/*.mp4
 **/*.dat
 **/*.bz2
+wandb/debug-internal.log
+wandb/debug.log
+wandb/latest-run
