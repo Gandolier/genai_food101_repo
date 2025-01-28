@@ -36,7 +36,7 @@ class BaseDiffusionTrainer(BaseTrainer):
         self.opt = self.opt_instance.forward()
 
         self.lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-            self.opt, **self.config.optimizer_args.sheduler
+            self.opt, **self.config.optimizer_args.scheduler
             )
 
         if os.path.exists(self.adam_checkpnt_pth):

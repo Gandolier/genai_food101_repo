@@ -136,7 +136,6 @@ class BaseTrainer:
                                                 step=self.step, 
                                                 #images_type=[self.classes[lbl] for lbl in labels.tolist()]
                                                 )
-                self.lr_scheduler.step()
 
                 elapse = time.time() - start
                 print(f"Validation at step {self.step} took {elapse} seconds")
@@ -146,6 +145,9 @@ class BaseTrainer:
 
             if self.step % self.config.train.checkpoint_step == 0:
                 self.save_checkpoint()
+            
+            if self.step % self.config.optimizer_args.scheduler.T_max * 2 == 0:
+                self.lr_scheduler.step()
 
 
     @abstractmethod

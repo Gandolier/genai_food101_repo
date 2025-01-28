@@ -8,8 +8,8 @@ exp:
 data:
     input_train_dir: data/train # /home/cocochamba/Python_labs/genai_food101_repo/
     input_val_dir: data/test # /home/cocochamba/Python_labs/genai_food101_repo/
-    train_batch_size: 64
-    val_batch_size: 64
+    train_batch_size: 16
+    val_batch_size: 16
     num_workers: 6
     
 train:
@@ -19,37 +19,37 @@ train:
     checkpoint_path: /home/cocochamba/Python_labs/genai_food101_repo/checkpoints
     val_metrics: ["fid"]
     start_step: 0
-    steps: 30000
-    log_step: 50
-    checkpoint_step: 300
-    val_step: 300
+    steps: 63000
+    log_step: 200
+    checkpoint_step: 500
+    val_step: 500
 
 checkpoint:
-    start_step: 951
-    run_id: wn9o9av5
+    start_step: 0
+    run_id: 
 
 utils:
     diffusion:
-        n_timesteps: 100
+        n_timesteps: 500
         beta_min: 0.0001
         beta_max: 0.02
         
 model_args:
     encoder_args:
         input_channels: 3
-        time_embedding: 128
+        time_embedding: 256
     decoder_args:
         last_fmap_channels: 512
         output_channels: 3
-        time_embedding: 128
+        time_embedding: 256
         first_fmap_channels: 64
 
 optimizer_args:
     adam:
         lr: 0.001
         weight_decay: 0.0
-    sheduler:
-        T_max: 100
+    scheduler:
+        T_max: 105
         eta_min: 0.00001
 
 
