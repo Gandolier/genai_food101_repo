@@ -1,0 +1,8 @@
+{"time":"2025-01-27T21:08:46.169714477+03:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-27T21:08:46.169754462+03:00","level":"INFO","msg":"created symlink","path":"/home/cocochamba/Python_labs/genai_food101_repo/wandb/run-20250127_210846-r1us9xrs/logs/debug-core.log"}
+{"time":"2025-01-27T21:08:46.277769201+03:00","level":"INFO","msg":"created new stream","id":"r1us9xrs"}
+{"time":"2025-01-27T21:08:46.277837248+03:00","level":"INFO","msg":"stream: started","id":"r1us9xrs"}
+{"time":"2025-01-27T21:08:46.277915324+03:00","level":"INFO","msg":"sender: started","stream_id":"r1us9xrs"}
+{"time":"2025-01-27T21:08:46.27791323+03:00","level":"INFO","msg":"writer: Do: started","stream_id":"r1us9xrs"}
+{"time":"2025-01-27T21:08:46.277937435+03:00","level":"INFO","msg":"handler: started","stream_id":"r1us9xrs"}
+{"time":"2025-01-27T21:08:47.484379775+03:00","level":"INFO","msg":"Starting system monitor"}

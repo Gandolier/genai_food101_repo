@@ -1,0 +1,18 @@
+{"time":"2025-01-27T20:24:21.664908738+03:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-27T20:24:21.664961203+03:00","level":"INFO","msg":"created symlink","path":"/home/cocochamba/Python_labs/genai_food101_repo/wandb/run-20250127_202421-f8lh5ccl/logs/debug-core.log"}
+{"time":"2025-01-27T20:24:21.780336081+03:00","level":"INFO","msg":"created new stream","id":"f8lh5ccl"}
+{"time":"2025-01-27T20:24:21.780403563+03:00","level":"INFO","msg":"stream: started","id":"f8lh5ccl"}
+{"time":"2025-01-27T20:24:21.780417158+03:00","level":"INFO","msg":"writer: Do: started","stream_id":"f8lh5ccl"}
+{"time":"2025-01-27T20:24:21.780455016+03:00","level":"INFO","msg":"handler: started","stream_id":"f8lh5ccl"}
+{"time":"2025-01-27T20:24:21.780546381+03:00","level":"INFO","msg":"sender: started","stream_id":"f8lh5ccl"}
+{"time":"2025-01-27T20:24:41.43786509+03:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": EOF"}
+{"time":"2025-01-27T20:24:48.912778892+03:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/graphql\": EOF"}
+{"time":"2025-01-27T20:24:56.50169898+03:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-27T20:26:46.218462847+03:00","level":"INFO","msg":"stream: closing","id":"f8lh5ccl"}
+{"time":"2025-01-27T20:26:46.21851909+03:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-27T20:26:46.220328343+03:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-27T20:26:47.255387009+03:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-27T20:26:47.869539089+03:00","level":"INFO","msg":"handler: closed","stream_id":"f8lh5ccl"}
+{"time":"2025-01-27T20:26:47.869611416+03:00","level":"INFO","msg":"writer: Close: closed","stream_id":"f8lh5ccl"}
+{"time":"2025-01-27T20:26:47.869630247+03:00","level":"INFO","msg":"sender: closed","stream_id":"f8lh5ccl"}
+{"time":"2025-01-27T20:26:47.869708007+03:00","level":"INFO","msg":"stream: closed","id":"f8lh5ccl"}

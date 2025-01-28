@@ -1,0 +1,54 @@
+_content:
+    value:
+        data: '{''input_train_dir'': ''data/train'', ''input_val_dir'': ''data/test'', ''train_batch_size'': 64, ''val_batch_size'': 64}'
+        exp: '{''experiment_dir'': ''/home/cocochamba/Python_labs/genai_food101_repo'', ''device'': ''cpu'', ''seed'': 1987, ''use_wandb'': True, ''model_type'': ''diffusion'', ''config_path'': ''/home/cocochamba/Python_labs/genai_food101_repo/configs/diffusion_train.yaml''}'
+        fid_args: '{''batch_size'': 8, ''device'': ''cuda'', ''dims'': 2048}'
+        losses_args: '{''mse'': {''reduction'': ''mean''}, ''smooth_l1'': {''reduction'': ''mean'', ''beta'': 0.5}}'
+        losses_coef: '{''mse'': 0.5, ''smooth_l1'': 0.5}'
+        model_args: '{''encoder_args'': {''input_channels'': 3, ''time_embedding'': 256}, ''decoder_args'': {''last_fmap_channels'': 512, ''output_channels'': 3, ''time_embedding'': 256, ''first_fmap_channels'': 64}}'
+        optimizer_args: '{''adam'': {''lr'': 0.0001, ''weight_decay'': 0.0}, ''sheduler'': {''T_max'': 500, ''eta_min'': 1e-06}}'
+        train: '{''trainer'': ''base_diffusion_trainer'', ''model'': ''ddpm'', ''optimizer'': ''adam'', ''checkpoint_path'': ''/home/cocochamba/Python_labs/genai_food101_repo/checkpoints'', ''val_metrics'': [''fid''], ''start_step'': 0, ''steps'': 300000, ''log_step'': 500, ''checkpoint_step'': 15000, ''val_step'': 15000}'
+        utils: '{''diffusion'': {''n_timesteps'': 100, ''beta_min'': 0.0001, ''beta_max'': 0.02}}'
+_flags_cache:
+    value:
+        struct: null
+_metadata:
+    value:
+        element_type: typing.Any
+        flags_root: false
+        key: null
+        key_type: typing.Any
+        object_type: builtins.dict
+        optional: true
+        ref_type: typing.Any
+_parent:
+    value: null
+_wandb:
+    value:
+        cli_version: 0.19.1
+        m: []
+        python_version: 3.12.3
+        t:
+            "1":
+                - 1
+                - 41
+                - 51
+                - 55
+            "2":
+                - 1
+                - 41
+                - 51
+                - 55
+            "3":
+                - 13
+                - 14
+                - 16
+                - 23
+                - 55
+                - 61
+            "4": 3.12.3
+            "5": 0.19.1
+            "8":
+                - 5
+            "12": 0.19.1
+            "13": linux-x86_64

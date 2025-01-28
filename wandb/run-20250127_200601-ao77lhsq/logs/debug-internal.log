@@ -1,0 +1,16 @@
+{"time":"2025-01-27T20:06:01.950670191+03:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-27T20:06:01.950732302+03:00","level":"INFO","msg":"created symlink","path":"/home/cocochamba/Python_labs/genai_food101_repo/wandb/run-20250127_200601-ao77lhsq/logs/debug-core.log"}
+{"time":"2025-01-27T20:06:02.063046488+03:00","level":"INFO","msg":"created new stream","id":"ao77lhsq"}
+{"time":"2025-01-27T20:06:02.06312016+03:00","level":"INFO","msg":"stream: started","id":"ao77lhsq"}
+{"time":"2025-01-27T20:06:02.06314806+03:00","level":"INFO","msg":"writer: Do: started","stream_id":"ao77lhsq"}
+{"time":"2025-01-27T20:06:02.063173876+03:00","level":"INFO","msg":"handler: started","stream_id":"ao77lhsq"}
+{"time":"2025-01-27T20:06:02.063205392+03:00","level":"INFO","msg":"sender: started","stream_id":"ao77lhsq"}
+{"time":"2025-01-27T20:06:03.172811939+03:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-27T20:12:39.621689628+03:00","level":"INFO","msg":"stream: closing","id":"ao77lhsq"}
+{"time":"2025-01-27T20:12:39.621760971+03:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-27T20:12:39.623430905+03:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-27T20:12:41.083019285+03:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-27T20:12:41.888813138+03:00","level":"INFO","msg":"handler: closed","stream_id":"ao77lhsq"}
+{"time":"2025-01-27T20:12:41.888895581+03:00","level":"INFO","msg":"sender: closed","stream_id":"ao77lhsq"}
+{"time":"2025-01-27T20:12:41.888882256+03:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ao77lhsq"}
+{"time":"2025-01-27T20:12:41.889073131+03:00","level":"INFO","msg":"stream: closed","id":"ao77lhsq"}

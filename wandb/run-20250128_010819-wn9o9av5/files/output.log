@@ -1,0 +1,9 @@
+Step 0 completed, it took 12.802146196365356 seconds
+100%|████████████████████████████████████████████████████████| 1/1 [00:01<00:00,  1.10s/it]
+100%|████████████████████████████████████████████████████████| 1/1 [00:00<00:00,  1.16it/s]
+Validation at step 0 took 76.4324779510498 seconds
+[34m[1mwandb[0m: [33mWARNING[0m Tried to log to step 0 that is less than the current step 951. Steps must be monotonically increasing, so this data will be ignored. See https://wandb.me/define-metric to log data out of order.
+[34m[1mwandb[0m: [33mWARNING[0m Tried to log to step 0 that is less than the current step 951. Steps must be monotonically increasing, so this data will be ignored. See https://wandb.me/define-metric to log data out of order.
+[34m[1mwandb[0m: [33mWARNING[0m Tried to log to step 0 that is less than the current step 951. Steps must be monotonically increasing, so this data will be ignored. See https://wandb.me/define-metric to log data out of order.
+Step 1 completed, it took 12.244508743286133 seconds
+Step 2 completed, it took 12.0551438331604 seconds

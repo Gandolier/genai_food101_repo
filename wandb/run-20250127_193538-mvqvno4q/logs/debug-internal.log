@@ -1,0 +1,17 @@
+{"time":"2025-01-27T19:35:38.980042682+03:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-27T19:35:38.98010797+03:00","level":"INFO","msg":"created symlink","path":"/home/cocochamba/Python_labs/genai_food101_repo/wandb/run-20250127_193538-mvqvno4q/logs/debug-core.log"}
+{"time":"2025-01-27T19:35:39.090262985+03:00","level":"INFO","msg":"created new stream","id":"mvqvno4q"}
+{"time":"2025-01-27T19:35:39.090334905+03:00","level":"INFO","msg":"stream: started","id":"mvqvno4q"}
+{"time":"2025-01-27T19:35:39.090378571+03:00","level":"INFO","msg":"writer: Do: started","stream_id":"mvqvno4q"}
+{"time":"2025-01-27T19:35:39.090379853+03:00","level":"INFO","msg":"handler: started","stream_id":"mvqvno4q"}
+{"time":"2025-01-27T19:35:39.090511921+03:00","level":"INFO","msg":"sender: started","stream_id":"mvqvno4q"}
+{"time":"2025-01-27T19:35:40.387888526+03:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-27T19:37:51.177431886+03:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/cocochamba-hse-university/ddpm/mvqvno4q/file_stream\": dial tcp: lookup api.wandb.ai on 127.0.0.53:53: read udp 127.0.0.1:40550->127.0.0.53:53: i/o timeout"}
+{"time":"2025-01-27T19:41:54.671152609+03:00","level":"INFO","msg":"stream: closing","id":"mvqvno4q"}
+{"time":"2025-01-27T19:41:54.671237937+03:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-27T19:41:54.67241454+03:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-27T19:41:55.876704835+03:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-27T19:41:56.363115428+03:00","level":"INFO","msg":"handler: closed","stream_id":"mvqvno4q"}
+{"time":"2025-01-27T19:41:56.363205646+03:00","level":"INFO","msg":"sender: closed","stream_id":"mvqvno4q"}
+{"time":"2025-01-27T19:41:56.363188883+03:00","level":"INFO","msg":"writer: Close: closed","stream_id":"mvqvno4q"}
+{"time":"2025-01-27T19:41:56.363330953+03:00","level":"INFO","msg":"stream: closed","id":"mvqvno4q"}

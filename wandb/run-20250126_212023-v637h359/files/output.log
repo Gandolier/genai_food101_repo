@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/home/cocochamba/Python_labs/genai_food101_repo/train.py", line 26, in <module>
+    trainer.training_loop()
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/base_trainer.py", line 117, in training_loop
+    val_metrics_dict, images, labels = self.validate()
+                                      ^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/base_trainer.py", line 147, in validate
+    filename = random.choice(os.listdir(self.config.data.input_train_dir + '/' + self.classes[i]))
+                                                                                 ~~~~~~~~~~~~^^^
+KeyError: tensor(4, device='cuda:0')

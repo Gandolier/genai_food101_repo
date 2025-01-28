@@ -1,0 +1,70 @@
+exp:
+    experiment_dir: /home/cocochamba/Python_labs/genai_food101_repo
+    device: cpu
+    seed: 1987
+    use_wandb: True
+    model_type: diffusion
+
+data:
+    input_train_dir: data/train # /home/cocochamba/Python_labs/genai_food101_repo/
+    input_val_dir: data/test # /home/cocochamba/Python_labs/genai_food101_repo/
+    train_batch_size: 64
+    val_batch_size: 64
+    num_workers: 6
+    
+train:
+    trainer: base_diffusion_trainer
+    model: ddpm
+    optimizer: adam
+    checkpoint_path: /home/cocochamba/Python_labs/genai_food101_repo/checkpoints
+    val_metrics: ["fid"]
+    start_step: 0
+    steps: 30000
+    log_step: 50
+    checkpoint_step: 300
+    val_step: 300
+
+checkpoint:
+    start_step: 951
+    run_id: wn9o9av5
+
+utils:
+    diffusion:
+        n_timesteps: 100
+        beta_min: 0.0001
+        beta_max: 0.02
+        
+model_args:
+    encoder_args:
+        input_channels: 3
+        time_embedding: 128
+    decoder_args:
+        last_fmap_channels: 512
+        output_channels: 3
+        time_embedding: 128
+        first_fmap_channels: 64
+
+optimizer_args:
+    adam:
+        lr: 0.0001
+        weight_decay: 0.0
+    sheduler:
+        T_max: 500
+        eta_min: 0.000001
+
+
+fid_args:
+    batch_size: 8
+    device: cuda
+    dims: 2048
+
+losses_coef:
+    mse: 0.5
+    smooth_l1: 0.5
+
+losses_args:
+    mse:
+        reduction: mean
+    smooth_l1:
+        reduction: mean
+        beta: 0.5

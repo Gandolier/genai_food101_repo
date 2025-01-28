@@ -1,0 +1,16 @@
+{"time":"2025-01-26T21:12:56.327898805+03:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-26T21:12:56.327942427+03:00","level":"INFO","msg":"created symlink","path":"/home/cocochamba/Python_labs/genai_food101_repo/wandb/run-20250126_211256-ahc2mdal/logs/debug-core.log"}
+{"time":"2025-01-26T21:12:56.443922966+03:00","level":"INFO","msg":"created new stream","id":"ahc2mdal"}
+{"time":"2025-01-26T21:12:56.443994219+03:00","level":"INFO","msg":"stream: started","id":"ahc2mdal"}
+{"time":"2025-01-26T21:12:56.444028143+03:00","level":"INFO","msg":"handler: started","stream_id":"ahc2mdal"}
+{"time":"2025-01-26T21:12:56.444044413+03:00","level":"INFO","msg":"writer: Do: started","stream_id":"ahc2mdal"}
+{"time":"2025-01-26T21:12:56.444040416+03:00","level":"INFO","msg":"sender: started","stream_id":"ahc2mdal"}
+{"time":"2025-01-26T21:12:57.43721787+03:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-26T21:12:59.086733119+03:00","level":"INFO","msg":"stream: closing","id":"ahc2mdal"}
+{"time":"2025-01-26T21:12:59.086777061+03:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-26T21:12:59.087817609+03:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-26T21:12:59.912927015+03:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-26T21:13:00.540117172+03:00","level":"INFO","msg":"handler: closed","stream_id":"ahc2mdal"}
+{"time":"2025-01-26T21:13:00.540193585+03:00","level":"INFO","msg":"sender: closed","stream_id":"ahc2mdal"}
+{"time":"2025-01-26T21:13:00.540186622+03:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ahc2mdal"}
+{"time":"2025-01-26T21:13:00.540315082+03:00","level":"INFO","msg":"stream: closed","id":"ahc2mdal"}

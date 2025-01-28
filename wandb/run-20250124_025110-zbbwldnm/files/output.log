@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/home/cocochamba/Python_labs/genai_food101_repo/train.py", line 26, in <module>
+    trainer.training_loop()
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/base_trainer.py", line 113, in training_loop
+    losses_dict = self.train_step()
+                  ^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/diffusion_trainers.py", line 71, in train_step
+    pred = self.model(noisy_img, lbl)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/models/diffusion_models.py", line 47, in forward
+    x = self.activation(l(x))
+                       ^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 554, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 549, in _conv_forward
+    return F.conv2d(
+           ^^^^^^^^^
+RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same

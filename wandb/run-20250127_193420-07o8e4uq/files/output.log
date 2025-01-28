@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "/home/cocochamba/Python_labs/genai_food101_repo/train.py", line 26, in <module>
+    trainer.training_loop()
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/base_trainer.py", line 117, in training_loop
+    val_metrics_dict, images = self.validate()
+                              ^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/base_trainer.py", line 146, in validate
+    images_sample, images_pth = self.synthesize_images(batch_size = 8,
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/diffusion_trainers.py", line 90, in synthesize_images
+    img_sample = self.diffusion_utils.sample(x. self.model).cpu()
+                                             ^^^^^^^
+AttributeError: 'Tensor' object has no attribute 'self'

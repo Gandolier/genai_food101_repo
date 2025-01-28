@@ -1,0 +1,40 @@
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+cuda:0
+Traceback (most recent call last):
+  File "/home/cocochamba/Python_labs/genai_food101_repo/train.py", line 26, in <module>
+    trainer.training_loop()
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/base_trainer.py", line 113, in training_loop
+    losses_dict = self.train_step()
+                  ^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/diffusion_trainers.py", line 76, in train_step
+    step_loss = losses_registry['mse'](self.config.losses_args['mse']).forward(loss_batch)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/losses/diffusion_losses.py", line 16, in forward
+    return self.loss_fn(batch["real_noise"], batch["predicted_noise"])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/loss.py", line 608, in forward
+    return F.mse_loss(input, target, reduction=self.reduction)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/functional.py", line 3793, in mse_loss
+    expanded_input, expanded_target, _Reduction.get_enum(reduction)
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/_reduction.py", line 23, in get_enum
+    raise ValueError(f"{reduction} is not a valid value for reduction")
+ValueError: {'reduction': 'mean'} is not a valid value for reduction

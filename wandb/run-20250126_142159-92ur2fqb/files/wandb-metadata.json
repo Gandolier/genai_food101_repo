@@ -1,0 +1,41 @@
+{
+  "os":  "Linux-6.8.0-51-generic-x86_64-with-glibc2.39",
+  "python":  "CPython 3.12.3",
+  "startedAt":  "2025-01-26T11:21:59.041013Z",
+  "args":  [
+    "exp.config_path=/home/cocochamba/Python_labs/genai_food101_repo/configs/diffusion_train.yaml"
+  ],
+  "program":  "/home/cocochamba/Python_labs/genai_food101_repo/train.py",
+  "codePath":  "train.py",
+  "email":  "kvmoiseev@edu.hse.ru",
+  "root":  "/home/cocochamba/Python_labs/genai_food101_repo",
+  "host":  "Jelezo",
+  "executable":  "/home/cocochamba/.pyenv/versions/neural/bin/python3",
+  "codePathLocal":  "train.py",
+  "cpu_count":  4,
+  "cpu_count_logical":  8,
+  "gpu":  "NVIDIA GeForce MX230",
+  "gpu_count":  1,
+  "disk":  {
+    "/":  {
+      "total":  "194481451008",
+      "used":  "49122742272"
+    }
+  },
+  "memory":  {
+    "total":  "18799599616"
+  },
+  "cpu":  {
+    "count":  4,
+    "countLogical":  8
+  },
+  "gpu_nvidia":  [
+    {
+      "name":  "NVIDIA GeForce MX230",
+      "memoryTotal":  "2147483648",
+      "cudaCores":  256,
+      "architecture":  "Pascal"
+    }
+  ],
+  "cudaVersion":  "12.2"
+}

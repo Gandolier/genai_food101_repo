@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "/home/cocochamba/Python_labs/genai_food101_repo/train.py", line 26, in <module>
+    trainer.training_loop()
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/base_trainer.py", line 117, in training_loop
+    losses_dict = self.train_step()
+                  ^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/training/trainers/diffusion_trainers.py", line 68, in train_step
+    pred = self.model(noisy_img_t, t)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/models/ddpm_model.py", line 241, in forward
+    segmentation_mask = self.decoder(*enc_fmaps, t=t)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/models/ddpm_model.py", line 203, in forward
+    output = m(fmaps[idx], fmaps[idx+1], t)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/Python_labs/genai_food101_repo/models/ddpm_model.py", line 152, in forward
+    output = self.transpose(fmap)
+             ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cocochamba/.pyenv/versions/neural/lib/python3.12/site-packages/torch/nn/modules/conv.py", line 1162, in forward
+    return F.conv_transpose2d(
+           ^^^^^^^^^^^^^^^^^^^
+RuntimeError: Given transposed=1, weight of size [256, 256, 2, 2], expected input[64, 512, 2, 2] to have 256 channels, but got 512 channels instead
