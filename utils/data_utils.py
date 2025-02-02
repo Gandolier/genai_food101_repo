@@ -14,7 +14,7 @@ IMG_EXTENSIONS = [
     ".bmp",
     ".BMP",
     ".tiff",
-]
+    ]
 
 
 def is_image_file(filename):
@@ -22,7 +22,7 @@ def is_image_file(filename):
 
 def class2idx(dir, idxkeys=False):
     classes = sorted(os.listdir(dir))
-    if idxkeys: # -------------------- to be fixed for faster list-indexing ------------------------------------------------
+    if idxkeys: 
         return {idx: cls_name for idx, cls_name in enumerate(classes)}
     else:
         return {cls_name: idx for idx, cls_name in enumerate(classes)}

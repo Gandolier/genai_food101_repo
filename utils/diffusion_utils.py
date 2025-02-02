@@ -38,7 +38,7 @@ class DiffusionUtils:
         return (alpha_hat_sqrts * x) + (one_mins_alpha_hat_sqrt * noise), noise
     
     
-    def sample(self, x:torch.Tensor, model:torch.nn.Module):
+    def sample(self, x:torch.Tensor, label:torch.Tensor, model:torch.nn.Module):
         # image shape: (N, C, H, W)
         model.eval()       
         with torch.no_grad():
@@ -50,7 +50,7 @@ class DiffusionUtils:
                 one_minus_alpha = 1 - alpha
                 one_minus_alpha_hat = 1 - alpha_hat
                 
-                predicted_noise = model(x, t)
+                predicted_noise = model(x, t, label)
                 
                 if i > 1:noise = torch.randn_like(x).to(self.device)
                 else:noise = torch.zeros_like(x).to(self.device)

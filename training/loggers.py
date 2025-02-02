@@ -59,10 +59,11 @@ class TrainingLogger:
         self.logger.log_values(val_metrics, step)
 
     def log_batch_of_images(self, batch: torch.Tensor, step: int, images_type=None):
-        if images_type is None:
+        batch = batch.cpu().detach().numpy() * 255
+        if images_type == None:
             images = batch
         else:
-            images = {classes: image for (classes, image) in zip(images_type, batch)}
+            images = {classes: Image.fromarray(image, mode='RGB') for (classes, image) in zip(images_type, batch)}
         self.logger.log_images(images, step)
         
     def update_losses(self, losses_dict):
