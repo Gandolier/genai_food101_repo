@@ -18,14 +18,23 @@ diffusion_trainers_registry = ClassRegistry()
 
 @diffusion_trainers_registry.add_to_registry(name="base_diffusion_trainer")
 class BaseDiffusionTrainer(BaseTrainer):
+    def setup_init_weights(self, net):
+        if isinstance(net, torch.nn.Linear):
+            torch.nn.init.xavier_normal_(net.weight)
+            net.bias.data.fill_(0.01)
+    
     def setup_models(self):
         model_instance = diffusion_models_registry[self.config.train.model]
         self.model = model_instance(self.config).to(self.device)
         
         if os.path.exists(self.model_checkpnt_pth):
-            self.model.load_state_dict(torch.load(self.model_checkpnt_pth, weights_only=True))
+            self.model.load_state_dict(torch.load(self.model_checkpnt_pth, 
+                                                  weights_only=True), strict=False)
+        else:
+            self.model.apply(self.setup_init_weights)
         
         self.diffusion_utils = DiffusionUtils(**self.config.utils.diffusion)
+        self.w = self.config.model_args.w
         return self.model
 
 
@@ -60,12 +69,14 @@ class BaseDiffusionTrainer(BaseTrainer):
     def train_step(self):
         batch = next(iter(self.train_dataloader))
         img, lbl = batch.values()
-        #lbl = lbl.to(self.device)
+        lbl = lbl.to(self.device)
         img = img.to(self.device)
         t = self.diffusion_utils.sampleTimestep(size=img.shape[0])
 
         noisy_img_t, noise = self.diffusion_utils.noiseImage(img, t)
-        pred = self.model(noisy_img_t, t)
+        pred_cond = self.model(noisy_img_t, t, lbl)
+        pred_uncond = self.model(noisy_img_t, t, lbl)
+        pred = (1 + self.w) * pred_cond + (self.w) * pred_uncond
         
         loss_batch = {'real_noise': noise, 'predicted_noise': pred}
         step_loss = self.step_loss(loss_batch)
@@ -84,32 +95,31 @@ class BaseDiffusionTrainer(BaseTrainer):
 
     def synthesize_images(self, batch_size, task='validation'):
         if task == 'validation':
-            #labels = torch.randint(0, 102, (batch_size,)).to(self.device) 
+            labels = torch.randint(0, 101, (batch_size,)).to(self.device) 
             x = torch.rand(batch_size, 3, 64, 64).to(self.device)       
-            img_sample = self.diffusion_utils.sample(x,  self.model).cpu()
+            img_sample = self.diffusion_utils.sample(x,  labels, self.model).cpu()
             img_sample = (img_sample.clamp(-1, 1) + 1) / 2
             
             path_to_saved_pics = self.experiment_dir + '/data/validation/fake'
             for i in range(img_sample.shape[0]):
-                save_image(img_sample[i], path_to_saved_pics + '/' + str(i) + '.png') 
+                save_image(img_sample[i], path_to_saved_pics + '/' + str(i) + '.jpg') 
         
         elif task == 'inference': 
             del_files(self.infer_fake)
             batch_size = 20 # the size of the test data for each class
             num_classes = 101 # number of classes
             
-            #for idx, name in self.classes.items():
-                #labels = (torch.ones(batch_size) * idx).to(self.device)
+            labels = torch.tensor([clas for clas in self.classes.keys() for _ in range(batch_size)])
 
             x = torch.rand(batch_size * num_classes, 3, 64, 64).to(self.device)       
-            img_sample = self.diffusion_utils.sample(x,  self.model).cpu()
+            img_sample = self.diffusion_utils.sample(x, labels, self.model).cpu()
             img_sample = (img_sample.clamp(-1, 1) + 1) / 2
-            for j in range(img_sample.shape[0]):
-                save_image(img_sample[j], self.infer_fake + '/' + str(j) + '.png')
+            for j, lbl in enumerate(labels):
+                save_image(img_sample[j], self.infer_fake + '/' + self.classes[lbl] + '-' + str(j) + '.jpg')
             
             path_to_saved_pics = self.infer_fake
 
-        return img_sample, path_to_saved_pics, #labels
+        return img_sample, path_to_saved_pics, labels
     
 
 

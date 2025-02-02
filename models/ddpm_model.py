@@ -3,22 +3,27 @@ from models.ddpm_supplements import ddpm_supplements
 from typing import Iterable, Optional
 from torch import nn
 from utils.class_registry import ClassRegistry
-from models.diffusion_models import diffusion_models_registry
 import torch
 
+diffusion_models_registry = ClassRegistry()
 
 class Encoder(ResNet):
     def __init__(
-        self, input_channels:int, time_embedding:int, 
+        self, input_channels:int, time_embedding:int, p_uncond:float,
         block=BasicBlock, block_layers:list=[2, 2, 2, 2], n_heads:int=4):
       
         self.block = block
         self.block_layers = block_layers
         self.time_embedding = time_embedding
+        self.p_uncond = p_uncond
         self.input_channels = input_channels
         self.n_heads = n_heads
+        self.num_classes = 101
         
         super(Encoder, self).__init__(self.block, self.block_layers)
+
+        #class embedding layer
+        self.class_embed = nn.Embedding(self.num_classes, self.time_embedding)
         
         #time embedding layer
         self.sinusiodal_embedding = ddpm_supplements['sin_embed'](self.time_embedding)
@@ -47,10 +52,14 @@ class Encoder(ResNet):
         del self.maxpool, self.fc, self.avgpool
         
         
-    def forward(self, x:torch.Tensor, t:torch.Tensor):
+    def forward(self, x:torch.Tensor, t:torch.Tensor, 
+                labels:Optional[torch.Tensor]=None):
         #embed time positions
-        t = self.sinusiodal_embedding(t)
-        
+        t = self.sinusiodal_embedding(t) # (batch_size, time_embedding_size)
+        if labels != None and torch.rand(1) > self.p_uncond:
+            #embed labels
+            labels_embedding = self.class_embed(labels) # (batch_size, time_embedding_size)       
+            t = t + labels_embedding 
         #prepare fmap2
         fmap1 = self.conv1(x)
         t_emb = self.time_projection_layers[0](t)
@@ -85,7 +94,7 @@ class Encoder(ResNet):
         fmap5 = fmap5 + t_emb[:, :, None, None]
         fmap5 = self.attention_layers[4](fmap5)
         
-        return fmap1, fmap2, fmap3, fmap4, fmap5
+        return [fmap1, fmap2, fmap3, fmap4, fmap5], self.class_embed
     
     
     def make_time_projections(self, fmap_channels:Iterable[int]):
@@ -110,7 +119,7 @@ class DecoderBlock(nn.Module):
     def __init__(
         self, input_channels:int, output_channels:int, 
         time_embedding:int, upsample_scale:int=2, activation:nn.Module=nn.ReLU,
-        compute_attn:bool=True, n_heads:int=4):
+        compute_attn:bool=True, n_heads:int=4, p_uncond:float=.0):
         super(DecoderBlock, self).__init__()
 
         self.input_channels = input_channels
@@ -119,12 +128,16 @@ class DecoderBlock(nn.Module):
         self.time_embedding = time_embedding
         self.compute_attn = compute_attn
         self.n_heads = n_heads
+        self.p_uncond = p_uncond
+        #self.num_classes = 101
         
         #attention layer
         if self.compute_attn:
             self.attention = ddpm_supplements['self_attention'](self.output_channels, self.n_heads)
         else:self.attention = nn.Identity()
         
+        #class embedding layer
+        #self.class_embed = nn.Embedding(self.num_classes, self.time_embedding)
         #time embedding layer
         self.sinusiodal_embedding = ddpm_supplements['sin_embed'](self.time_embedding)
         
@@ -148,11 +161,14 @@ class DecoderBlock(nn.Module):
         self.activation = activation()
 
     
-    def forward(self, fmap:torch.Tensor, prev_fmap:Optional[torch.Tensor]=None, t:Optional[torch.Tensor]=None):
+    def forward(self, fmap:torch.Tensor, prev_fmap:Optional[torch.Tensor]=None, 
+                class_embed:Optional[nn.Embedding]=None, t:Optional[torch.Tensor]=None, 
+                labels:Optional[torch.Tensor]=None,):
         output = self.transpose(fmap)
         output = self.instance_norm1(output)
         output = self.conv(output)
         output = self.instance_norm2(output)
+        self.class_embed = class_embed
         
         #apply residual connection with previous feature map
         if torch.is_tensor(prev_fmap):
@@ -161,7 +177,10 @@ class DecoderBlock(nn.Module):
             
         #apply timestep embedding
         if torch.is_tensor(t):
-            t = self.sinusiodal_embedding(t)
+            t = self.sinusiodal_embedding(t)       
+            if labels != None and torch.rand(1) > self.p_uncond:
+                labels_embedding = self.class_embed(labels) # (batch_size, time_embedding_size)
+                t = t + labels_embedding 
             t_emb = self.time_projection_layer(t)
             output = output + t_emb[:, :, None, None]
             
@@ -173,7 +192,7 @@ class DecoderBlock(nn.Module):
 
 class Decoder(nn.Module):
     def __init__(
-        self, last_fmap_channels:int, output_channels:int, 
+        self, last_fmap_channels:int, output_channels:int, p_uncond:float,
         time_embedding:int, first_fmap_channels:int=64, n_heads:int=4):
         super(Decoder, self).__init__()
         
@@ -182,6 +201,7 @@ class Decoder(nn.Module):
         self.time_embedding = time_embedding
         self.first_fmap_channels = first_fmap_channels
         self.n_heads = n_heads
+        self.p_uncond = p_uncond
 
         self.residual_layers = self.make_layers()
 
@@ -194,15 +214,17 @@ class Decoder(nn.Module):
         self.final_layer.instance_norm2 = nn.Identity()
 
 
-    def forward(self, *fmaps, t:Optional[torch.Tensor]=None):
-        #fmaps(reversed): fmap5, fmap4, fmap3, fmap2, fmap1
+    def forward(self, *fmaps, t:Optional[torch.Tensor]=None,
+                labels:Optional[torch.Tensor]=None, class_embed):
+        self.class_embed = class_embed
         fmaps = [fmap for fmap in reversed(fmaps)]
-        ouptut = None
         for idx, m in enumerate(self.residual_layers):
             if idx == 0:
-                output = m(fmaps[idx], fmaps[idx+1], t)
+                output = m(fmaps[idx], fmaps[idx+1], 
+                           self.class_embed, t, labels)
                 continue
-            output = m(output, fmaps[idx+1], t)
+            output = m(output, fmaps[idx+1], 
+                       self.class_embed, t, labels)
         
         # no previous fmap is passed to the final decoder block
         # and no attention is computed
@@ -220,7 +242,8 @@ class Decoder(nn.Module):
             layer = DecoderBlock(
                 in_ch, out_ch, 
                 time_embedding=self.time_embedding,
-                compute_attn=True, n_heads=self.n_heads)
+                compute_attn=True, n_heads=self.n_heads, 
+                p_uncond=self.p_uncond)
             
             layers.append(layer)
 
@@ -236,7 +259,8 @@ class DDPM(nn.Module):
         self.encoder = Encoder(**config.model_args.encoder_args)
         self.decoder = Decoder(**config.model_args.decoder_args)
     
-    def forward(self, x:torch.Tensor, t:torch.Tensor):
-        enc_fmaps = self.encoder(x, t=t)
-        segmentation_mask = self.decoder(*enc_fmaps, t=t)
+    def forward(self, x:torch.Tensor, t:torch.Tensor, labels:torch.Tensor):
+        enc_fmaps, class_embed = self.encoder(x, t=t, labels=labels)
+        segmentation_mask = self.decoder(*enc_fmaps, t=t, labels=labels, 
+                                         class_embed=class_embed)
         return segmentation_mask

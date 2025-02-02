@@ -25,12 +25,12 @@ train:
     val_step: 500
 
 checkpoint:
-    start_step: 0
-    run_id: 
+    start_step: 2000
+    run_id: 87wjui7c
 
 utils:
     diffusion:
-        n_timesteps: 500
+        n_timesteps: 1000
         beta_min: 0.0001
         beta_max: 0.02
         
@@ -38,11 +38,14 @@ model_args:
     encoder_args:
         input_channels: 3
         time_embedding: 256
+        p_uncond: 0.2
     decoder_args:
         last_fmap_channels: 512
         output_channels: 3
         time_embedding: 256
         first_fmap_channels: 64
+        p_uncond: 0.2
+    w: 0.3
 
 optimizer_args:
     adam:

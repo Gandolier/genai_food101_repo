@@ -75,7 +75,6 @@ class BaseTrainer:
 
     def setup_experiment_dir(self):
         self.experiment_dir = self.config.exp.experiment_dir
-        self.classes = class2idx(self.config.data.input_train_dir, True)
 
         self.infer_real = self.config.data.input_val_dir + '/' + 'testpile'
         self.infer_fake = self.config.data.input_val_dir + '/' + 'fakepile'
@@ -103,6 +102,7 @@ class BaseTrainer:
             root=self.config.data.input_train_dir, 
             transforms=self.transform
             )
+        self.classes = class2idx(self.config.data.input_train_dir, True)
         return self.train_dataset
     
     def setup_dataloaders(self):
@@ -129,12 +129,12 @@ class BaseTrainer:
             if self.step % self.config.train.val_step == 0:
                 start = time.time()
 
-                val_metrics_dict, images = self.validate() 
+                val_metrics_dict, images, labels = self.validate() 
 
                 self.logger.log_val_metrics(val_metrics_dict, step=self.step)
                 self.logger.log_batch_of_images(images, 
                                                 step=self.step, 
-                                                #images_type=[self.classes[lbl] for lbl in labels.tolist()]
+                                                images_type=[self.classes[lbl] for lbl in labels.tolist()]
                                                 )
 
                 elapse = time.time() - start
@@ -162,12 +162,12 @@ class BaseTrainer:
     @torch.no_grad()
     def validate(self):#------------------------ TO DO: reconfigure func for multiple metrics -----------------------
         self.to_eval()
-        images_sample, images_pth = self.synthesize_images(batch_size = 8, 
-                                                           task = 'validation')
+        images_sample, images_pth, labels = self.synthesize_images(batch_size = 8, 
+                                                                   task = 'validation')
         real_images_pth = self.experiment_dir + '/data/validation/real'
-        for cls_name in np.random.choice(list(self.classes.values()), 8): #labels.tolist():
-            filename = random.choice(os.listdir(self.config.data.input_train_dir + '/' + cls_name))
-            shutil.copy(self.config.data.input_train_dir + '/' + cls_name + '/' + filename, 
+        for lbl in labels.tolist(): 
+            filename = random.choice(os.listdir(self.config.data.input_train_dir + '/' + self.classes[lbl]))
+            shutil.copy(self.config.data.input_train_dir + '/' + self.classes[lbl] + '/' + filename, 
                         real_images_pth
                         )
         metrics_dict = {}
@@ -179,7 +179,7 @@ class BaseTrainer:
             )
         del_files(real_images_pth)
         del_files(images_pth)
-        return metrics_dict, images_sample, #labels # image_sample is a torch.tensor
+        return metrics_dict, images_sample, labels # image_sample is a torch.tensor
 
 
     @abstractmethod
@@ -190,8 +190,8 @@ class BaseTrainer:
     @torch.no_grad()
     def inference(self): 
         self.to_eval() 
-        images_sample, images_pth, = self.synthesize_images(batch_size = 20, 
-                                                            task = 'inference') 
+        images_sample, images_pth, labels = self.synthesize_images(batch_size = 20, 
+                                                                   task = 'inference') 
         metrics_dict = {}
         metric = self.metrics_instance # -------------------------- TO DO: reconfigure metrics -----------------------
         metrics_dict[metric.get_name()] = metric(
