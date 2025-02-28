@@ -1,11 +1,9 @@
 from torchvision.models.resnet import ResNet, BasicBlock
 from models.ddpm_supplements import ddpm_supplements
+from models.ddim_model import diffusion_models_registry
 from typing import Iterable, Optional
 from torch import nn
-from utils.class_registry import ClassRegistry
 import torch
-
-diffusion_models_registry = ClassRegistry()
 
 class Encoder(ResNet):
     def __init__(

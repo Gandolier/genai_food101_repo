@@ -6,55 +6,62 @@ exp:
     model_type: diffusion
 
 data:
-    input_train_dir: data/train # /home/cocochamba/Python_labs/genai_food101_repo/
-    input_val_dir: data/test # /home/cocochamba/Python_labs/genai_food101_repo/
+    input_train_dir: data/train
+    input_val_dir: data/test 
     train_batch_size: 16
-    val_batch_size: 16
+    val_batch_size: 8
     num_workers: 6
     
 train:
     trainer: base_diffusion_trainer
-    model: ddpm
+    model: ddim
     optimizer: adam
     checkpoint_path: /home/cocochamba/Python_labs/genai_food101_repo/checkpoints
     val_metrics: ["fid"]
     start_step: 0
     steps: 63000
     log_step: 200
-    checkpoint_step: 500
+    checkpoint_step: 200
     val_step: 500
 
 checkpoint:
-    start_step: 2000
-    run_id: 87wjui7c
+    start_step: 7500
+    run_id: 1jnf1wxw
 
 utils:
     diffusion:
         n_timesteps: 1000
         beta_min: 0.0001
         beta_max: 0.02
+        beta_schedule: linear
+        skip_type: uniform
+        skip_factor: 1.
         
 model_args:
-    encoder_args:
-        input_channels: 3
-        time_embedding: 256
-        p_uncond: 0.2
-    decoder_args:
-        last_fmap_channels: 512
-        output_channels: 3
-        time_embedding: 256
-        first_fmap_channels: 64
-        p_uncond: 0.2
-    w: 0.3
+    in_channels: 3
+    out_ch: 3
+    ch: 128
+    emb_dim: 32
+    ch_mult: [1, 2, 2, 4]
+    num_res_blocks: 2
+    attn_resolutions: [16, ]
+    dropout: 0.1
+    resamp_with_conv: True
+    resolution: 64
+    w: 0.0
+    p: 0.2
+
+ema:
+    decay: 0.99
+    is_active: True
 
 optimizer_args:
     adam:
-        lr: 0.001
-        weight_decay: 0.0
+        lr: 0.0002
+        weight_decay: 0.000
     scheduler:
-        T_max: 105
-        eta_min: 0.00001
-
+        T_max: 100
+        eta_min: 0.00002
 
 fid_args:
     batch_size: 8

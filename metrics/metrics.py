@@ -6,7 +6,7 @@ metrics_registry = ClassRegistry()
 
 
 @metrics_registry.add_to_registry(name="fid")
-class FID(): # ----------------- TO DO: reconfigure so as to use images from multiple folders ---------------
+class FID(): 
     def __call__(self, orig_pth, synt_pth, fid_config):
         fid = calculate_fid_given_paths(
                     paths = [orig_pth, synt_pth], 
@@ -19,5 +19,3 @@ class FID(): # ----------------- TO DO: reconfigure so as to use images from mul
     
     def get_name(self):
         return "fid"
-
-#print(FID().__call__(path1, path2, fid_config))

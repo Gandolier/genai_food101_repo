@@ -18,40 +18,14 @@ from utils.data_utils import class2idx, del_files
 class BaseTrainer:
     def __init__(self, config):
         self.config = config
-        self.step = 0
         self.device = config.exp.device
         
         if len(os.listdir(config.train.checkpoint_path)) != 0:
             self.start_step = config.checkpoint.start_step
             self.run_id = config.checkpoint.run_id
         else:
-            self.start_step = config.train.start_step    
-
-    def setup(self):
-        self.setup_experiment_dir()
-
-        self.setup_models()
-        self.setup_optimizers()
-        self.setup_losses()
-
-        self.setup_metrics()
-        self.setup_logger()
-
-        self.setup_datasets()
-        self.setup_dataloaders()
-
-
-    def setup_inference(self):
-        self.setup_experiment_dir()
-
-        self.setup_models()
-
-        self.setup_metrics()
-        self.setup_logger()
-
-        self.setup_datasets()
-        self.setup_dataloaders()
-
+            self.start_step = config.train.start_step
+            
 
     @abstractmethod
     def setup_models(self):
@@ -71,7 +45,34 @@ class BaseTrainer:
 
     @abstractmethod
     def to_eval(self):
-        pass
+        pass    
+
+    def setup(self):
+        self.setup_experiment_dir()
+
+        self.setup_models()
+        self.setup_optimizers()
+        self.setup_losses()
+
+        self.setup_metrics()
+        self.setup_ema()
+        self.setup_logger()
+
+        self.setup_datasets()
+        self.setup_dataloaders()
+
+
+    def setup_inference(self):
+        self.setup_experiment_dir()
+
+        self.setup_models()
+
+        self.setup_metrics()
+        self.setup_logger()
+
+        self.setup_datasets()
+        self.setup_dataloaders()
+
 
     def setup_experiment_dir(self):
         self.experiment_dir = self.config.exp.experiment_dir
@@ -81,8 +82,9 @@ class BaseTrainer:
 
         self.model_checkpnt_pth = self.config.train.checkpoint_path + '/' + self.config.train.model + '.pth'
         self.adam_checkpnt_pth = self.config.train.checkpoint_path  + '/' + 'adam.pth'
+        self.ema_checkpnt_pth = self.config.train.checkpoint_path + '/' + 'ema.pth'
         
-    def setup_metrics(self): #----- TO DO: add Kernel Inception Distance and reconfigure func for multiple metrics ----
+    def setup_metrics(self): 
         self.metrics_instance = metrics_registry[self.config.train.val_metrics[0]]()
         return self.metrics_instance 
 
@@ -111,24 +113,21 @@ class BaseTrainer:
             batch_size=self.config.data.train_batch_size,
             num_workers=self.config.data.num_workers
             )
+        self.train_dataloader = iter(self.train_dataloader)
         return self.train_dataloader
         
 
     def training_loop(self):
         self.to_train()
 
-        for self.step in range(self.start_step, self.config.train.steps + 1):
-            start = time.time()
-            
+        for self.step in range(self.start_step, self.config.train.steps + 1):            
             losses_dict = self.train_step()
             self.logger.update_losses(losses_dict)
-            
-            elapse = time.time() - start
-            print(f"Step {self.step} completed, it took {elapse} seconds") # -------- TO BE REMOVED --------
-            
-            if self.step % self.config.train.val_step == 0:
-                start = time.time()
 
+            if self.step % self.config.train.checkpoint_step == 0 and self.step != 0:
+                self.save_checkpoint()
+
+            if self.step % self.config.train.val_step == 0 and self.step != 0:
                 val_metrics_dict, images, labels = self.validate() 
 
                 self.logger.log_val_metrics(val_metrics_dict, step=self.step)
@@ -136,17 +135,10 @@ class BaseTrainer:
                                                 step=self.step, 
                                                 images_type=[self.classes[lbl] for lbl in labels.tolist()]
                                                 )
-
-                elapse = time.time() - start
-                print(f"Validation at step {self.step} took {elapse} seconds")
-
             if self.step % self.config.train.log_step == 0:
                 self.logger.log_train_losses(self.step)
-
-            if self.step % self.config.train.checkpoint_step == 0:
-                self.save_checkpoint()
             
-            if self.step % self.config.optimizer_args.scheduler.T_max * 2 == 0:
+            if self.step % self.config.optimizer_args.scheduler.T_max == 0 and self.step != 0:
                 self.lr_scheduler.step()
 
 
@@ -160,18 +152,20 @@ class BaseTrainer:
 
 
     @torch.no_grad()
-    def validate(self):#------------------------ TO DO: reconfigure func for multiple metrics -----------------------
-        self.to_eval()
-        images_sample, images_pth, labels = self.synthesize_images(batch_size = 8, 
-                                                                   task = 'validation')
+    def validate(self):
+        self.to_eval()            
+        images_sample, images_pth, labels = self.synthesize_images(task = 'validation',
+                                            batch_size = self.config.data.val_batch_size)
         real_images_pth = self.experiment_dir + '/data/validation/real'
-        for lbl in labels.tolist(): 
+        
+        for lbl in labels.tolist():
             filename = random.choice(os.listdir(self.config.data.input_train_dir + '/' + self.classes[lbl]))
             shutil.copy(self.config.data.input_train_dir + '/' + self.classes[lbl] + '/' + filename, 
                         real_images_pth
                         )
+            
         metrics_dict = {}
-        metric = self.metrics_instance # ------------------------- TO DO: reconfigure metrics -----------------------
+        metric = self.metrics_instance 
         metrics_dict[metric.get_name()] = metric(
             orig_pth=real_images_pth, 
             synt_pth=images_pth,
@@ -179,7 +173,7 @@ class BaseTrainer:
             )
         del_files(real_images_pth)
         del_files(images_pth)
-        return metrics_dict, images_sample, labels # image_sample is a torch.tensor
+        return metrics_dict, images_sample, labels
 
 
     @abstractmethod
@@ -191,12 +185,12 @@ class BaseTrainer:
     def inference(self): 
         self.to_eval() 
         images_sample, images_pth, labels = self.synthesize_images(batch_size = 20, 
-                                                                   task = 'inference') 
+                                                                task = 'inference') 
         metrics_dict = {}
-        metric = self.metrics_instance # -------------------------- TO DO: reconfigure metrics -----------------------
+        metric = self.metrics_instance 
         metrics_dict[metric.get_name()] = metric(
             orig_pth=self.infer_real, 
             synt_pth=images_pth,
             fid_config=self.config.fid_args
             )
-        return metrics_dict, images_sample # image_sample is a torch.tensor
+        return metrics_dict, images_sample, labels 
